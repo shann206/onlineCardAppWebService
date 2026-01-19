@@ -1,8 +1,9 @@
 // include the required packages
 const express = require('express');
 const mysql = require('mysql2/promise');
+const cors = require("cors");
 require('dotenv').config();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //database config info
 const dbConfig = {
@@ -16,7 +17,11 @@ const dbConfig = {
     queueLimit: 0,
 };
 
-const cors = require("cors");
+//intialize Express app
+const app = express();
+//helps app to read JSON
+app.use(express.json());
+
 const allowedOrigins = [
     "http://localhost:3000",
 // "https://YOUR-frontend.vercel.app", // add later
@@ -37,16 +42,6 @@ app.use(
         credentials: false,
     })
 );
-
-//intialize Express app
-const app = express();
-//helps app to read JSON
-app.use(express.json());
-
-//start the server
-app.listen(port, () => {
-    console.log('Server running on port', port);
-});
 
 //Example Route: Get all cards
 app.get('/allcards', async(req, res) => {
@@ -73,3 +68,7 @@ app.post('/addcard', async(req, res) => {
     }
 })
 
+//start the server
+app.listen(port, () => {
+    console.log('Server running on port', port);
+});

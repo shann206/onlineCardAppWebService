@@ -16,6 +16,28 @@ const dbConfig = {
     queueLimit: 0,
 };
 
+const cors = require("cors");
+const allowedOrigins = [
+    "http://localhost:3000",
+// "https://YOUR-frontend.vercel.app", // add later
+// "https://YOUR-frontend.onrender.com" // add later
+];
+app.use(
+    cors({
+        origin: function (origin, callback) {
+// allow requests with no origin (Postman/server-to-server)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error("Not allowed by CORS"));
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: false,
+    })
+);
+
 //intialize Express app
 const app = express();
 //helps app to read JSON
@@ -51,24 +73,3 @@ app.post('/addcard', async(req, res) => {
     }
 })
 
-const cors = require("cors");
-const allowedOrigins = [
-    "http://localhost:3000",
-// "https://YOUR-frontend.vercel.app", // add later
-// "https://YOUR-frontend.onrender.com" // add later
-];
-app.use(
-    cors({
-        origin: function (origin, callback) {
-// allow requests with no origin (Postman/server-to-server)
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-            return callback(new Error("Not allowed by CORS"));
-        },
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: false,
-    })
-);

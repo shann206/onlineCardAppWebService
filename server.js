@@ -22,6 +22,7 @@ const app = express();
 //helps app to read JSON
 app.use(express.json());
 
+//configure CORS on the backend
 const allowedOrigins = [
     "http://localhost:3000",
 // "https://YOUR-frontend.vercel.app", // add later

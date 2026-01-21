@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const cors = require("cors");
 require('dotenv').config();
 const port = process.env.PORT || 3000;
-//try re-render
+
 //database config info
 const dbConfig = {
     host: process.env.DB_HOST,

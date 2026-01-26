@@ -76,7 +76,7 @@ function requireAuth(req, res, next) {
     }
 
     const [type, token] = header.split(" ");
-    if (type !== "Beare" || !token) {
+    if (type !== "Bearer" || !token) {
         return res.status(401).json({ error: "Invalid authorization format" });
     }
 

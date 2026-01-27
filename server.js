@@ -28,6 +28,7 @@ const allowedOrigins = [
     "http://localhost:3000",
 // "https://YOUR-frontend.vercel.app", // add later
 // "https://YOUR-frontend.onrender.com" // add later
+    "https://card-app-starter-wzxq.onrender.com/cards",
 ];
 app.use(
     cors({

@@ -48,8 +48,8 @@ app.use(
 
 // const DEMO_USER = { id: 1, username: "admin", password: "admin123" };
 
-// const jwt = require("jsonwebtoken");
-// const JWT_SECRET = process.env.JWT_SECRET;
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // app.post("/login", async (req, res) => {
 //     const { username, password } = req.body;
@@ -74,10 +74,10 @@ const users = [
 ];
 
 app.post("/login", async (req, res) => {
-  const { role, username, password } = req.body;
+  const { username, password } = req.body;
 
   // find user from the array
-  const user = users.find(u => u.role === role && u.username === username && u.password === password);
+  const user = users.find(u => u.username === username && u.password === password);
 
   if (!user) {
     return res.status(401).json({ error: "Invalid credentials" });
@@ -115,6 +115,16 @@ function requireAuth(req, res, next) {
         return res.status(401).json({ error: "Invalid token" });
     }
 }
+
+function requireAdmin(req, res, next) {
+    requireAuth(req, res, () => {
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Admins only" });
+        }
+        next();
+    });
+}
+
 //Example Route: Get all cards
 app.get('/allcards', async(req, res) => {
     try {
@@ -155,7 +165,7 @@ app.put('/updatecard/:id', async (req, res) => {
 });
 
 // Example Route: Delete a card
-app.delete('/deletecard/:id', async (req, res) => {
+app.delete('/deletecard/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     try{
         let connection = await mysql.createConnection(dbConfig);
